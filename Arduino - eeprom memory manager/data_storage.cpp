@@ -49,16 +49,40 @@ void data_storage::init(void)
 
 int data_storage::set(const data_type_t id, const uint8_t * source)
 {
+	if ((id >= DS_LAST) || (source == NULL)) {
+		return -1;
+	}
+
+	for (uint16_t i = 0; i < data_storage_config[id].size; i++) {
+		EEPROM.write(data_storage_config[id].addr + i, source[i]);
+	}
+
+	this->mark_as_set(id);
+
 	return 0;
 }
 
 int data_storage::get(const data_type_t id, uint8_t * destination)
 {
+	if ((id >= DS_LAST) || (destination == NULL)) {
+		return -1;
+	}
+
+	for (uint16_t i = 0; i < data_storage_config[id].size; i++) {
+		*(destination + i) = EEPROM.read(data_storage_config[id].addr + i);
+	}
+
 	return 0;
 }
 
 int data_storage::release(const data_type_t id)
 {
+	if (id >= DS_LAST) {
+		return -1;
+	}
+
+	this->mark_as_free(id);
+
 	return 0;
 }
 
