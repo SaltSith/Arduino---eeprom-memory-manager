@@ -14,10 +14,48 @@ data_info_t *data_storage::data_storage_config = data_storage_cfg;
 
 void data_storage::mark_as_set(const data_type_t id)
 {
+	if (id >= DS_LAST) {
+		return;
+	}
+
+	uint8_t buf[sizeof(this->marker)] = { 0 };
+
+	for (uint8_t i = 0; i < sizeof(this->marker); i++) {
+		buf[i] = EEPROM.read(MARKER_ADDRESS + i);
+	}
+
+	memcpy(&this->marker, buf, sizeof(this->marker));
+
+	this->marker |= (1 << id);
+
+	memcpy(buf, &this->marker, sizeof(this->marker));
+
+	for (uint8_t i = 0; i < sizeof(this->marker); i++) {
+		EEPROM.write(MARKER_ADDRESS + i, buf[i]);
+	}
 }
 
 void data_storage::mark_as_free(const data_type_t id)
 {
+	if (id >= DS_LAST) {
+		return;
+	}
+
+	uint8_t buf[sizeof(this->marker)] = { 0 };
+
+	for (uint8_t i = 0; i < sizeof(this->marker); i++) {
+		buf[i] = EEPROM.read(MARKER_ADDRESS + i);
+	}
+
+	memcpy(&this->marker, buf, sizeof(this->marker));
+
+	this->marker &= ~(1 << id);
+
+	memcpy(buf, &this->marker, sizeof(this->marker));
+
+	for (uint8_t i = 0; i < sizeof(this->marker); i++) {
+		EEPROM.write(MARKER_ADDRESS + i, buf[i]);
+	}
 }
 
 void data_storage::init(void)
