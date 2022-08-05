@@ -24,9 +24,9 @@ typedef struct {
 class data_storage
 {
 private:
-	uint16_t size;							/// Eeprom meory size
-	uint32_t marker;						/// Data marker
-	static data_info_t *data_storage_cfg;	/// Data storage config
+	uint16_t size;								/// Eeprom meory size
+	uint32_t marker;							/// Data marker
+	static data_info_t *data_storage_config;	/// Data storage config
 
 	void mark_as_set(const data_type_t id);
 	void mark_as_free(const data_type_t id);

@@ -10,7 +10,7 @@ const uint8_t data_storage_init_value = 0xA6;	/// Value to compare with eeprom v
 
 extern data_info_t data_storage_cfg[];
 
-data_info_t *data_storage::data_storage_cfg = data_storage_cfg;
+data_info_t *data_storage::data_storage_config = data_storage_cfg;
 
 void data_storage::mark_as_set(const data_type_t id)
 {
