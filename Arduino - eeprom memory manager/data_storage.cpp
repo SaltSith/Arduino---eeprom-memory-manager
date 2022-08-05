@@ -88,5 +88,21 @@ int data_storage::release(const data_type_t id)
 
 bool data_storage::is_set(const data_type_t id)
 {
+	if (id >= DS_LAST) {
+		return -1;
+	}
+
+	uint8_t buf[sizeof(this->marker)] = { 0 };
+
+	for (uint8_t i = 0; i < sizeof(this->marker); i++) {
+		buf[i] = EEPROM.read(MARKER_ADDRESS + i);
+	}
+
+	memcpy(&this->marker, buf, sizeof(this->marker));
+
+	if (this->marker & (1 << id)) {
+		return true;
+	}
+
 	return false;
 }
